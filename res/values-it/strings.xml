@@ -23,7 +23,6 @@
 <resources>
     <string name="about_feedback">Commenti:</string>
     <string name="about_homepage">Pagina web:</string>
-    <string name="AboutText">KeePassDroid è un\'implementazione del gestore password KeePass.</string>
     <string name="about_twitter">Twitter:</string>
     <string name="accept">Accetto</string>
     <string name="add_entry">Aggiungi voce</string>
@@ -31,7 +30,6 @@
     <string name="add_group_title">Aggiungi Gruppo</string>
     <string name="algorithm">Algoritmo</string>
     <string name="algorithm_colon">Algoritmo:</string>
-    <string name="app_name">KeePassDroid</string>
     <string name="app_timeout">Scadenza applicazione</string>
     <string name="app_timeout_summary">Tempo prima che venga bloccato il database quando l\'applicazione è inattiva.</string>
     <string name="application">Applicazione</string>

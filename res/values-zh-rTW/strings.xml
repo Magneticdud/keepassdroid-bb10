@@ -20,7 +20,6 @@
 <resources>
     <string name="about_feedback">回饋：</string>
     <string name="about_homepage">主頁：</string>
-    <string name="AboutText">KeePassDroid是KeePass密碼管理軟體的Android版本。</string>
     <string name="about_twitter">Twitter：</string>
     <string name="accept">接受</string>
     <string name="add_entry">添加條目</string>
@@ -28,7 +27,6 @@
     <string name="add_group_title">添加群</string>
     <string name="algorithm">演算法</string>
     <string name="algorithm_colon">演算法：</string>
-    <string name="app_name">KeePassDroid</string>
     <string name="app_timeout">應用程式超時</string>
     <string name="app_timeout_summary">應用程式處於非活動時鎖定資料庫。</string>
     <string name="application">應用程式</string>

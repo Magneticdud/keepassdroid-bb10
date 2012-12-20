@@ -22,7 +22,6 @@
 <resources>
     <string name="about_feedback">Supportanfrage:</string>
     <string name="about_homepage">Webseite:</string>
-    <string name="AboutText">KeePassDroid ist die Implementierung des KeePass password manager für die Android Plattform.</string>
     <string name="about_twitter">Twitter:</string>
     <string name="accept">Akzeptieren</string>
     <string name="add_entry">Eintrag hinzufügen</string>
@@ -30,7 +29,6 @@
     <string name="add_group_title">Gruppe hinzufügen</string>
     <string name="algorithm">Algorithmus</string>
     <string name="algorithm_colon">Algorithmus:</string>
-    <string name="app_name">KeePassDroid</string>
     <string name="app_timeout">Anwendungssperre</string>
     <string name="app_timeout_summary">Zeiteinstellung der Anwendungssperre während sie inaktiv ist.</string>
     <string name="application">Anwendung</string>

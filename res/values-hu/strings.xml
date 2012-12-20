@@ -2,7 +2,6 @@
 <resources>
     <string name="about_feedback">Visszajelzés:</string>
     <string name="about_homepage">Weboldal:</string>
-    <string name="AboutText">KeePassDroid a KeePass jelszókezelő android implementációja.</string>
     <string name="about_twitter">Twitter:</string>
     <string name="accept">Elfogadás</string>
     <string name="add_entry">Bejegyzés hozzáadása</string>
@@ -10,7 +9,6 @@
     <string name="add_group_title">Csoport hozzáadása</string>
     <string name="algorithm">Algoritmus</string>
     <string name="algorithm_colon">Algoritmus:</string>
-    <string name="app_name">KeePassDroid</string>
     <string name="app_timeout">Alkalmazás időkorlátja</string>
     <string name="app_timeout_summary">Beállíthatja, mennyi idő után kerüljön lezárásra az adatbázis.</string>
     <string name="application">Alkalmazás</string>

@@ -20,7 +20,6 @@
 <resources>
     <string name="about_feedback">Отзывы:</string>
     <string name="about_homepage">Сайт:</string>
-    <string name="AboutText">KeePassDroid является Android-версией программы KeePass Password Safe</string>
     <string name="about_twitter">Твиттер:</string>
     <string name="accept">Принять</string>
     <string name="add_entry">Новая запись</string>
@@ -28,7 +27,6 @@
     <string name="add_group_title">Новая группа</string>
     <string name="algorithm">Алгоритм</string>
     <string name="algorithm_colon">Алгоритм:</string>
-    <string name="app_name">KeePassDroid</string>
     <string name="app_timeout">Блокировка базы</string>
     <string name="app_timeout_summary">Задержка блокировки при бездействии</string>
     <string name="application">Программа</string>

@@ -20,7 +20,6 @@
 <resources>
     <string name="about_feedback">Tilbakemelding:</string>
     <string name="about_homepage">Heimeside:</string>
-    <string name="AboutText">KeePassDroid er ei android-utgåve av KeePass passordstyrar.</string>
     <string name="about_twitter">Twitter:</string>
     <string name="accept">Godta</string>    
     <string name="add_entry">Legg til post</string>
@@ -28,7 +27,6 @@
     <string name="add_group_title">Legg til gruppe</string>
     <string name="algorithm">Algoritme</string>
     <string name="algorithm_colon">Algoritme:</string>
-    <string name="app_name">KeePassDroid</string>
     <string name="app_timeout">Programtidsavbrot</string>
     <string name="app_timeout_summary">Tid før databasen blir låst når programmet ikkje er i bruk.</string>
     <string name="application">Program</string>

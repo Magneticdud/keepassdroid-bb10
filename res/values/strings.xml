@@ -20,7 +20,7 @@
 <resources>
     <string name="about_feedback">Feedback:</string>
     <string name="about_homepage">Homepage:</string>
-    <string name="AboutText">KeePassDroid is an Android implementation of the KeePass password manager.</string>
+    <string name="AboutText">KPD is loosely based on KeePassDroid, an implementation of the KeePass password manager.</string>
     <string name="about_twitter">Twitter:</string>
     <string name="accept">Accept</string>
     <string name="add_entry">Add entry</string>
@@ -28,7 +28,7 @@
     <string name="add_group_title">Add Group</string>
     <string name="algorithm">Algorithm</string>
     <string name="algorithm_colon">Algorithm:</string>
-    <string name="app_name">KeePassDroid</string>
+    <string name="app_name">KPD</string>
     <string name="app_timeout">Application timeout</string>
     <string name="app_timeout_summary">Time before locking database when the application is inactive.</string>
     <string name="application">Application</string>

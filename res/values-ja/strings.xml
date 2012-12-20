@@ -20,7 +20,6 @@
 <resources>
     <string name="about_feedback">フィードバック:</string>
     <string name="about_homepage">WEBサイト:</string>
-    <string name="AboutText">\"KeePassDroid\"はパスワードマネージャソフト\"KeePass\"をAndroid上で利用する為のアプリです。</string>
     <string name="about_twitter">Twitter:</string>
     <string name="accept">決定</string>
     <string name="add_entry">エントリーを追加</string>
@@ -28,7 +27,6 @@
     <string name="add_group_title">新しいグループ名を入力</string>
     <string name="algorithm">アルゴリズム</string>
     <string name="algorithm_colon">アルゴリズム:</string>
-    <string name="app_name">KeePassDroid</string>
     <string name="app_timeout">アプリケーション タイムアウト</string>
     <string name="app_timeout_summary">KeePassがこの時間非アクティブだった場合、データベースをロックします。</string>
     <string name="application">アプリケーション</string>
