@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 Brian Pellin.
+ * Copyright 2013 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -17,28 +17,32 @@
  *  along with KeePassDroid.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.keepassdroid;
+package com.keepassdroid.view;
 
-import android.annotation.SuppressLint;
-import com.android.keepass.KeePass;
-import com.keepassdroid.app.App;
+import java.util.ArrayList;
 
-@SuppressLint("Registered")
-public class LockCloseActivity extends LockingActivity {
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.View;
+import android.widget.ScrollView;
+
+public class NoFocusScrollView extends ScrollView {
+
+	public NoFocusScrollView(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+	}
+
+	public NoFocusScrollView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+	}
+
+	public NoFocusScrollView(Context context) {
+		super(context);
+	}
 
 	@Override
-	protected void onResume() {
-		super.onResume();
-
-		checkShutdown();
-	}
-	
-	private void checkShutdown() {
-		if ( App.isShutdown() && App.getDB().Loaded() ) {
-			setResult(KeePass.EXIT_LOCK);
-			finish();
-		}
-		
+	public ArrayList<View> getFocusables(int direction) {
+		return new ArrayList<View>();
 	}
 
 }

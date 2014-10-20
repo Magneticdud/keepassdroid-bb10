@@ -70,8 +70,8 @@ public abstract class EntryEditActivity extends LockCloseActivity {
 
 	protected PwEntry mEntry;
 	private boolean mShowPassword = false;
-	private boolean mIsNew;
-	private int mSelectedIconID = -1;
+	protected boolean mIsNew;
+	protected int mSelectedIconID = -1;
 	
 	public static void Launch(Activity act, PwEntry pw) {
 		Intent i;
@@ -171,18 +171,7 @@ public abstract class EntryEditActivity extends LockCloseActivity {
 			public void onClick(View v) {
 				EntryEditActivity act = EntryEditActivity.this;
 				
-				// Require title
-				String title = Util.getEditText(act, R.id.entry_title);
-				if ( title.length() == 0 ) {
-					Toast.makeText(act, R.string.error_title_required, Toast.LENGTH_LONG).show();
-					return;
-				}
-				
-				// Validate password
-				String pass = Util.getEditText(act, R.id.entry_password);
-				String conf = Util.getEditText(act, R.id.entry_confpassword);
-				if ( ! pass.equals(conf) ) {
-					Toast.makeText(act, R.string.error_pass_match, Toast.LENGTH_LONG).show();
+				if (!validateBeforeSaving()) {
 					return;
 				}
 				
@@ -230,16 +219,39 @@ public abstract class EntryEditActivity extends LockCloseActivity {
 		
 	}
 	
-	protected PwEntry populateNewEntry() {
-		PwEntry newEntry = mEntry.clone(true);
+	protected boolean validateBeforeSaving() {
+		// Require title
+		String title = Util.getEditText(this, R.id.entry_title);
+		if ( title.length() == 0 ) {
+			Toast.makeText(this, R.string.error_title_required, Toast.LENGTH_LONG).show();
+			return false;
+		}
 		
-		if (mSelectedIconID == -1 && mIsNew) {
-			newEntry.icon = App.getDB().pm.iconFactory.getIcon(0);
+		// Validate password
+		String pass = Util.getEditText(this, R.id.entry_password);
+		String conf = Util.getEditText(this, R.id.entry_confpassword);
+		if ( ! pass.equals(conf) ) {
+			Toast.makeText(this, R.string.error_pass_match, Toast.LENGTH_LONG).show();
+			return false;
 		}
+		
+		return true;
+	}
+	
+	protected PwEntry populateNewEntry() {
+		return populateNewEntry(null);
+	}
+	
+	protected PwEntry populateNewEntry(PwEntry entry) {
+		PwEntry newEntry;
+		if (entry == null) {
+			newEntry = mEntry.clone(true);
+		} 
 		else {
-			newEntry.icon = App.getDB().pm.iconFactory.getIcon(mSelectedIconID);
+			newEntry = entry;
+			
 		}
-
+		
 		Date now = Calendar.getInstance().getTime(); 
 		newEntry.setLastAccessTime(now);
 		newEntry.setLastModificationTime(now);
@@ -338,7 +350,7 @@ public abstract class EntryEditActivity extends LockCloseActivity {
 		}
 	}
 
-	private void fillData() {
+	protected void fillData() {
 		ImageButton currIconButton = (ImageButton) findViewById(R.id.icon_button);
 		App.getDB().drawFactory.assignDrawableTo(currIconButton, getResources(), mEntry.getIcon());
 		

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
- Copyright 2009-2012 Brian Pellin.
+ Copyright 2009-2013 Brian Pellin.
      
  This file is part of KeePassDroid.
 
@@ -33,11 +33,16 @@
     <string name="app_timeout_summary">Time before locking database when the application is inactive.</string>
     <string name="application">Application</string>
     <string name="application_settings">Application settings</string>
+    <string name="beta_dontask">Don\'t show again</string>
+    <string name="beta_warning">Support for saving changes to kdbx files is EXPERIMENTAL. Make backups of your database before saving changes.</string>
     <string name="brackets">Brackets</string>
     <string name="browser_intall_text">File browsing requires the Open Intents File Manager, click below to install it. Due to some quirks in the file manager, browsing may not work correctly, the first time you browse.</string>
     <string name="building_search_idx">Building search index&#8230;</string>
     <string name="cancel">Cancel</string>
     <string name="ClearClipboard">Clipboard cleared.</string>
+    <string name="clipboard_error_title">Clipboard error</string>
+    <string name="clipboard_error">Some Samsung Android phones have a bug in the clipboard implementation that causes copying from applications to fail. For more details go to:</string>
+    <string name="clipboard_error_clear">Clearing the clipboard failed</string>
     <string name="clipboard_timeout">Clipboard timeout</string>
     <string name="clipboard_timeout_summary">Time before clearing clipboard after copying username or password</string>
     <string name="copy_username">Select to copy username to clipboard</string>
@@ -85,8 +90,11 @@
     <string name="error_pass_match">Passwords do not match.</string>
     <string name="error_rounds_not_number">Rounds must be a number.</string>
     <string name="error_rounds_too_large">Rounds too big.  Setting to 2147483648.</string>
+    <string name="error_string_key">A field name is required for each string.</string>
     <string name="error_title_required">A title is required.</string>
     <string name="error_wrong_length">Enter a positive integer on length field</string>
+    <string name="field_name">Field Name</string>
+    <string name="field_value">Field value</string>
     <string name="FileNotFound">File not found.</string>
     <string name="file_browser">File Browser</string>
     <string name="generate_password">Generate Password</string>
@@ -146,6 +154,7 @@
     <string name="password_title">Enter database password</string>
     <string name="progress_create">Creating new database&#8230;</string>
     <string name="progress_title">Working&#8230;</string>
+    <string name="protection">Protection</string>
     <string name="remember_keyfile_summary">Remembers the location of keyfiles</string>
     <string name="remember_keyfile_title">Save keyfile</string>
     <string name="remove_from_filelist">Remove</string>

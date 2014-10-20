@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Brian Pellin.
+ * Copyright 2009-2013 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -53,6 +53,7 @@ public abstract class GroupActivity extends GroupBaseActivity {
 	
 	protected boolean addGroupEnabled = false;
 	protected boolean addEntryEnabled = false;
+	protected boolean isRoot = false;
 	
 	private static final String TAG = "Group Activity:";
 	
@@ -90,7 +91,10 @@ public abstract class GroupActivity extends GroupBaseActivity {
 	
 	protected abstract PwGroupId retrieveGroupId(Intent i);
 	
-	protected abstract void setupButtons();
+	protected void setupButtons() {
+		addGroupEnabled = true;
+		addEntryEnabled = !isRoot;
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +124,8 @@ public abstract class GroupActivity extends GroupBaseActivity {
 			return;
 		}
 		
+		isRoot = mGroup == db.root;
+		
 		setupButtons();
 
 		if ( addGroupEnabled && addEntryEnabled ) {
@@ -141,7 +147,7 @@ public abstract class GroupActivity extends GroupBaseActivity {
 			addGroup.setOnClickListener(new View.OnClickListener() {
 
 				public void onClick(View v) {
-					GroupEditActivity.Launch(GroupActivity.this, mGroup);
+					GroupEditActivity.Launch(GroupActivity.this);
 				}
 			});
 		}
@@ -163,7 +169,10 @@ public abstract class GroupActivity extends GroupBaseActivity {
 		setListAdapter(new PwGroupListAdapter(this, mGroup));
 		registerForContextMenu(getListView());
 		Log.w(TAG, "Finished creating group");
-
+		
+		if (isRoot) {
+			showWarnings();
+		}
 	}
 
 	@Override
@@ -204,5 +213,9 @@ public abstract class GroupActivity extends GroupBaseActivity {
 			default:
 				break;
 		}
+	}
+	
+	protected void showWarnings() {
+		
 	}
 }

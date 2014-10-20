@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 Brian Pellin.
+ * Copyright 2013 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -17,28 +17,21 @@
  *  along with KeePassDroid.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.keepassdroid;
+package com.keepassdroid.database.exception;
 
-import android.annotation.SuppressLint;
-import com.android.keepass.KeePass;
-import com.keepassdroid.app.App;
-
-@SuppressLint("Registered")
-public class LockCloseActivity extends LockingActivity {
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-
-		checkShutdown();
+public class SamsungClipboardException extends Exception {
+	
+	public SamsungClipboardException(String message) {
+		super(message);
 	}
 	
-	private void checkShutdown() {
-		if ( App.isShutdown() && App.getDB().Loaded() ) {
-			setResult(KeePass.EXIT_LOCK);
-			finish();
-		}
-		
+	public SamsungClipboardException(Exception e) {
+		super(e);
 	}
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3168837280393843509L;
 
 }
