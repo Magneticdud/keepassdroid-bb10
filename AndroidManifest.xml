@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.android.keepass"
-      android:installLocation="auto" android:versionCode="98" android:versionName="1.9.18.3">
-    <uses-sdk android:minSdkVersion="3" android:targetSdkVersion="15"/>
+      android:installLocation="auto" android:versionCode="111" android:versionName="1.98.1">
+    <uses-sdk android:minSdkVersion="3" android:targetSdkVersion="12"/>
 	<supports-screens
       android:smallScreens="true"
       android:normalScreens="true"
@@ -76,7 +76,9 @@
 			android:theme="@style/NoTitleBar"></activity>
 		<activity android:name="com.keepassdroid.LockingActivity" 
 			android:theme="@style/NoTitleBar"></activity>
-		<activity android:name="com.keepassdroid.EntryEditActivity" android:configChanges="orientation|keyboardHidden"
+		<activity android:name="com.keepassdroid.EntryEditActivityV3" android:configChanges="orientation|keyboardHidden"
+			android:theme="@style/NoTitleBar"></activity>
+		<activity android:name="com.keepassdroid.EntryEditActivityV4" android:configChanges="orientation|keyboardHidden"
 			android:theme="@style/NoTitleBar"></activity>
 		<activity android:name="com.keepassdroid.GroupEditActivity" android:theme="@style/Dialog"></activity>
 		<activity android:name="com.keepassdroid.IconPickerActivity" android:theme="@style/NoTitleBar"></activity>

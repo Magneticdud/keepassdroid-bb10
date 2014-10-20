@@ -98,10 +98,9 @@ public class ImporterV3 extends Importer {
 		super();
 	}
 
-	public ImporterV3(boolean debug) {
-		super(debug);
+	protected PwDatabaseV3 createDB() {
+		return new PwDatabaseV3();
 	}
-
 
 	/**
 	 * Load a v3 database file, return contents in a new PwDatabaseV3.
@@ -156,7 +155,7 @@ public class ImporterV3 extends Importer {
 		}
 
 		status.updateMessage(R.string.creating_db_key);
-		newManager = new PwDatabaseV3();
+		newManager = createDB();
 		newManager.setMasterKey( password, keyfile );
 
 		// Select algorithm
@@ -168,11 +167,9 @@ public class ImporterV3 extends Importer {
 			throw new InvalidAlgorithmException();
 		}
 
-
-		if ( debug ) {
-			newManager.dbHeader = hdr;
-		}
-
+		// Copy for testing
+		newManager.copyHeader(hdr);
+		
 		newManager.numKeyEncRounds = hdr.numKeyEncRounds;
 
 		newManager.name = "KeePass Password Manager";
@@ -218,10 +215,8 @@ public class ImporterV3 extends Importer {
 			throw new InvalidPasswordException();
 		}
 
-		if ( debug ) {
-			newManager.postHeader = new byte[encryptedPartSize];
-			System.arraycopy(filebuf, PwDbHeaderV3.BUF_SIZE, newManager.postHeader, 0, encryptedPartSize);
-		}
+		// Copy decrypted data for testing
+		newManager.copyEncrypted(filebuf, PwDbHeaderV3.BUF_SIZE, encryptedPartSize);
 
 		MessageDigest md = null;
 		try {
@@ -246,7 +241,7 @@ public class ImporterV3 extends Importer {
 		int pos = PwDbHeaderV3.BUF_SIZE;
 		PwGroupV3 newGrp = new PwGroupV3();
 		for( int i = 0; i < hdr.numGroups; ) {
-			int fieldType = LEDataInputStream.readShort( filebuf, pos );
+			int fieldType = LEDataInputStream.readUShort( filebuf, pos );
 			pos += 2;
 			int fieldSize = LEDataInputStream.readInt( filebuf, pos );
 			pos += 4;
@@ -268,7 +263,7 @@ public class ImporterV3 extends Importer {
 		// Import all entries
 		PwEntryV3 newEnt = new PwEntryV3();
 		for( int i = 0; i < hdr.numEntries; ) {
-			int fieldType = LEDataInputStream.readShort( filebuf, pos );
+			int fieldType = LEDataInputStream.readUShort( filebuf, pos );
 			int fieldSize = LEDataInputStream.readInt( filebuf, pos + 2 );
 
 			if( fieldType == 0xFFFF ) {
@@ -366,7 +361,7 @@ public class ImporterV3 extends Importer {
 			grp.icon = db.iconFactory.getIcon(LEDataInputStream.readInt(buf, offset));
 			break;
 		case 0x0008 :
-			grp.level = LEDataInputStream.readShort(buf, offset);
+			grp.level = LEDataInputStream.readUShort(buf, offset);
 			break;
 		case 0x0009 :
 			grp.flags = LEDataInputStream.readInt(buf, offset);
@@ -379,7 +374,7 @@ public class ImporterV3 extends Importer {
 	void readEntryField(PwDatabaseV3 db, PwEntryV3 ent, byte[] buf, int offset)
 	throws UnsupportedEncodingException
 	{
-		int fieldType = LEDataInputStream.readShort(buf, offset);
+		int fieldType = LEDataInputStream.readUShort(buf, offset);
 		offset += 2;
 		int fieldSize = LEDataInputStream.readInt(buf, offset);
 		offset += 4;

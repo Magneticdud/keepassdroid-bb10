@@ -1,5 +1,5 @@
 /*
-` * Copyright 2009 Brian Pellin.
+` * Copyright 2009-2011 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -27,7 +27,6 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,22 +48,13 @@ import com.keepassdroid.stream.NullOutputStream;
 
 public class PwDbV3Output extends PwDbOutput {
 	private PwDatabaseV3 mPM;
-	private OutputStream mOS;
-	private final boolean mDebug;
-	public static final boolean DEBUG = true;
 	
 	public PwDbV3Output(PwDatabaseV3 pm, OutputStream os) {
+		super(os);
+		
 		mPM = pm;
-		mOS = os;
-		mDebug = false;
 	}
 
-	public PwDbV3Output(PwDatabaseV3 pm, OutputStream os, boolean debug) {
-		mPM = pm;
-		mOS = os;
-		mDebug = debug;
-	}
-	
 	public byte[] getFinalKey(PwDbHeader header) throws PwDbOutputException {
 		try {
 			mPM.makeFinalKey(header.masterSeed, header.transformSeed, mPM.numKeyEncRounds);
@@ -74,10 +64,9 @@ public class PwDbV3Output extends PwDbOutput {
 		}
 	}
 	
+	@Override
 	public void output() throws PwDbOutputException {
-		
-		// Before we output the header, we should sort our list of groups and remove any orphaned nodes that are no longer part of the group hierarchy
-		sortGroupsForOutput();
+		prepForOutput();
 		
 		PwDbHeader header = outputHeader(mOS);
 		
@@ -113,6 +102,11 @@ public class PwDbV3Output extends PwDbOutput {
 		}
 	}
 	
+	private void prepForOutput() {
+		// Before we output the header, we should sort our list of groups and remove any orphaned nodes that are no longer part of the group hierarchy
+		sortGroupsForOutput();
+	}
+
 	public PwDbHeaderV3 outputHeader(OutputStream os) throws PwDbOutputException {
 		// Build header
 		PwDbHeaderV3 header = new PwDbHeaderV3();
@@ -133,22 +127,7 @@ public class PwDbV3Output extends PwDbOutput {
 		header.numEntries = mPM.entries.size();
 		header.numKeyEncRounds = mPM.getNumKeyEncRecords();
 		
-		// Reuse random values to test equivalence in debug mode
-		if ( mDebug ) {
-			System.arraycopy(mPM.dbHeader.encryptionIV, 0, header.encryptionIV, 0, mPM.dbHeader.encryptionIV.length);
-			System.arraycopy(mPM.dbHeader.masterSeed, 0, header.masterSeed, 0, mPM.dbHeader.masterSeed.length);
-			System.arraycopy(mPM.dbHeader.transformSeed, 0, header.transformSeed, 0, mPM.dbHeader.transformSeed.length);
-		} else {
-			SecureRandom random;
-			try {
-				random = SecureRandom.getInstance("SHA1PRNG");
-			} catch (NoSuchAlgorithmException e) {
-				throw new PwDbOutputException("Does not support secure random number generation.");
-			}
-			random.nextBytes(header.encryptionIV);
-			random.nextBytes(header.masterSeed);
-			random.nextBytes(header.transformSeed);
-		}
+		setIVs(header);
 		
 		// Write checksum Checksum
 		MessageDigest md = null;
