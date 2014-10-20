@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 Brian Pellin.
+ * Copyright 2010-2014 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -34,5 +34,11 @@ public class GroupActivityV3 extends GroupActivity {
 		}
 		
 		return new PwGroupIdV3(id);
+	}
+	
+	@Override
+	protected void setupButtons() {
+		super.setupButtons();
+		addEntryEnabled = !isRoot && !readOnly;
 	}
 }

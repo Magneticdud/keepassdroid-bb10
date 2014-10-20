@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 Brian Pellin.
+ * Copyright 2009-2014 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import com.keepassdroid.database.iterator.EntrySearchStringIterator;
+import com.keepassdroid.utils.SprEngine;
 
 public abstract class PwEntry implements Cloneable {
 
@@ -80,15 +81,34 @@ public abstract class PwEntry implements Cloneable {
 		icon = source.icon;
 	}
 	
-	public abstract void stampLastAccess();
-
 	public abstract UUID getUUID();
 	public abstract void setUUID(UUID u);
-	public abstract String getTitle();
-	public abstract String getUsername();
-	public abstract String getPassword();
-	public abstract String getUrl();
-	public abstract String getNotes();
+	
+	public String getTitle() {
+		return getTitle(false, null);
+	}
+	
+	public String getUsername() {
+		return getUsername(false, null);
+	}
+
+	public String getPassword() {
+		return getPassword(false, null);
+	}
+	
+	public String getUrl() {
+		return getUrl(false, null);
+	}
+
+	public String getNotes() {
+		return getNotes(false, null);
+	}
+
+	public abstract String getTitle(boolean decodeRef, PwDatabase db);
+	public abstract String getUsername(boolean decodeRef, PwDatabase db);
+	public abstract String getPassword(boolean decodeRef, PwDatabase db);
+	public abstract String getUrl(boolean decodeRef, PwDatabase db);
+	public abstract String getNotes(boolean decodeRef, PwDatabase db);
 	public abstract Date getCreationTime();
 	public abstract Date getLastModificationTime();
 	public abstract Date getLastAccessTime();
@@ -131,6 +151,29 @@ public abstract class PwEntry implements Cloneable {
 	
 	public EntrySearchStringIterator stringIterator() {
 		return EntrySearchStringIterator.getInstance(this);
+	}
+	
+	public void touch(boolean modified, boolean touchParents) {
+		Date now = new Date();
+		
+		setLastAccessTime(now);
+		
+		if (modified) {
+			setLastModificationTime(now);
+		}
+		
+		PwGroup parent = getParent();
+		if (touchParents && parent != null) {
+			parent.touch(modified, true);
+		}
+	}
+	
+	public void touchLocation() { }
+	
+	public abstract void setParent(PwGroup parent);
+	
+	public boolean isSearchingEnabled() {
+		return false;
 	}
 
 }

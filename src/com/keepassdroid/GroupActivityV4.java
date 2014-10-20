@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 Brian Pellin.
+ * Copyright 2010-2014 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -25,7 +25,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.view.Menu;
 
 import com.android.keepass.R;
 import com.keepassdroid.database.PwGroupId;
@@ -46,18 +45,16 @@ public class GroupActivityV4 extends GroupActivity {
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		
-		super.onCreateOptionsMenu(menu);
-		
-		menu.findItem(R.id.menu_change_master_key).setVisible(false);
-		
-		return true;
-
+	protected void setupButtons() {
+		super.setupButtons();
+		addEntryEnabled = !readOnly;
 	}
+	
 
 	@Override
 	protected void showWarnings() {
+		super.showWarnings();
+
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		
 		if (prefs.getBoolean(getString(R.string.show_beta_warning), true)) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 Brian Pellin.
+ * Copyright 2010-2014 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -198,7 +198,7 @@ public class PwEntryV3 extends PwEntry {
 	 * @return the actual password byte array.
 	 */
 	@Override
-	public String getPassword() {
+	public String getPassword(boolean decodeRef, PwDatabase db) {
 		if (password == null) {
 			return "";
 		}
@@ -356,13 +356,6 @@ public class PwEntryV3 extends PwEntry {
 	}
 
 	@Override
-	public void stampLastAccess() {
-		Calendar cal = Calendar.getInstance();
-		tLastAccess = new PwDate(cal.getTime());
-		
-	}
-
-	@Override
 	public Date getLastAccessTime() {
 		return tLastAccess.getJDate();
 	}
@@ -428,7 +421,7 @@ public class PwEntryV3 extends PwEntry {
 	}
 
 	@Override
-	public String getUsername() {
+	public String getUsername(boolean decodeRef, PwDatabase db) {
 		if (username == null) {
 			return "";
 		}
@@ -442,8 +435,8 @@ public class PwEntryV3 extends PwEntry {
 	}
 
 	@Override
-	public String getTitle() {
-		return title;
+	public String getTitle(boolean decodeRef, PwDatabase db) {
+        return title;
 	}
 
 	@Override
@@ -452,7 +445,7 @@ public class PwEntryV3 extends PwEntry {
 	}
 
 	@Override
-	public String getNotes() {
+	public String getNotes(boolean decodeRef, PwDatabase db) {
 		return additional;
 	}
 
@@ -462,7 +455,7 @@ public class PwEntryV3 extends PwEntry {
 	}
 
 	@Override
-	public String getUrl() {
+	public String getUrl(boolean decodeRef, PwDatabase db) {
 		return url;
 	}
 
@@ -528,5 +521,10 @@ public class PwEntryV3 extends PwEntry {
 		if (binaryData == null) {
 			binaryData = new byte[0];
 		}
+	}
+
+	@Override
+	public void setParent(PwGroup parent) {
+		this.parent = (PwGroupV3) parent;
 	}
 }

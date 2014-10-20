@@ -26,6 +26,7 @@ import java.util.UUID;
 public class PwGroupV4 extends PwGroup implements ITimeLogger {
 
 	//public static final int FOLDER_ICON = 48;
+	public static final boolean DEFAULT_SEARCHING_ENABLED = true;
 	
 	public PwGroupV4 parent = null;
 	public UUID uuid = PwDatabaseV4.UUID_ZERO;
@@ -46,6 +47,19 @@ public class PwGroupV4 extends PwGroup implements ITimeLogger {
 
 	public PwGroupV4() {
 		
+	}
+	
+	public PwGroupV4(boolean createUUID, boolean setTimes, String name, PwIconStandard icon) {
+		if (createUUID) {
+			uuid = UUID.randomUUID();
+		}
+		
+		if (setTimes) {
+			creation = lastMod = lastAccess = new Date();
+		}
+		
+		this.name = name;
+		this.icon = icon;
 	}
 	
 	public void AddGroup(PwGroupV4 subGroup, boolean takeOwnership) {
@@ -158,10 +172,12 @@ public class PwGroupV4 extends PwGroup implements ITimeLogger {
 		expireDate = date;
 	}
 
+	@Override
 	public void setLastAccessTime(Date date) {
 		lastAccess = date;
 	}
 
+	@Override
 	public void setLastModificationTime(Date date) {
 		lastMod = date;
 	}
@@ -197,32 +213,26 @@ public class PwGroupV4 extends PwGroup implements ITimeLogger {
 		}
 	}
 	
-	public boolean preOrderTraverseTree(GroupHandler groupHandler, EntryHandler entryHandler) {
-		if (entryHandler != null) {
-			for (PwEntry entry : childEntries) {
-				if (!entryHandler.operate((PwEntryV4) entry)) return false;
-				
-			}
-		}
-	
-		for (PwGroup g : childGroups) {
-			PwGroupV4 group = (PwGroupV4) g;
-			
-			if ((groupHandler != null) && !groupHandler.operate(group)) return false;
-			
-			group.preOrderTraverseTree(groupHandler, entryHandler);
-		}
-		
-		
-		return true;
-		
-	}
-
 	@Override
 	public void initNewGroup(String nm, PwGroupId newId) {
 		super.initNewGroup(nm, newId);
 		
 		lastAccess = lastMod = creation = parentGroupLastMod = new Date();
+	}
+	
+	public boolean isSearchEnabled() {
+		PwGroupV4 group = this;
+		while (group != null) {
+			Boolean search = group.enableSearching;
+			if (search != null) {
+				return search;
+			}
+			
+			group = group.parent;
+		}
+		
+		// If we get to the root group and its null, default to true
+		return true;
 	}
 
 }

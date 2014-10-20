@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Brian Pellin.
+ * Copyright 2009-2014 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -57,6 +57,7 @@ import com.android.keepass.KeePass;
 import com.android.keepass.R;
 import com.keepassdroid.app.App;
 import com.keepassdroid.compat.ActivityCompat;
+import com.keepassdroid.database.PwDatabase;
 import com.keepassdroid.database.PwEntry;
 import com.keepassdroid.database.PwEntryV4;
 import com.keepassdroid.database.exception.SamsungClipboardException;
@@ -93,6 +94,7 @@ public class EntryActivity extends LockCloseActivity {
 	private int mPos;
 	private NotificationManager mNM;
 	private BroadcastReceiver mIntentReceiver;
+	protected boolean readOnly = false;
 	
 	private DateFormat dateFormat;
 	private DateFormat timeFormat;
@@ -110,6 +112,13 @@ public class EntryActivity extends LockCloseActivity {
 			}
 			
 		});
+		
+		if (readOnly) {
+			edit.setVisibility(View.GONE);
+			
+			View divider = findViewById(R.id.entry_divider2);
+			divider.setVisibility(View.GONE);
+		}
 	}
 
 	@Override
@@ -130,6 +139,7 @@ public class EntryActivity extends LockCloseActivity {
 			finish();
 			return;
 		}
+		readOnly = db.readOnly;
 
 		setResult(KeePass.EXIT_NORMAL);
 
@@ -138,14 +148,18 @@ public class EntryActivity extends LockCloseActivity {
 		mPos = i.getIntExtra(KEY_REFRESH_POS, -1);
 		assert(uuid != null);
 		
-		mEntry = db.entries.get(uuid);
-		
+		mEntry = db.pm.entries.get(uuid);
+		if (mEntry == null) {
+			Toast.makeText(this, R.string.entry_not_found, Toast.LENGTH_LONG).show();
+			finish();
+			return;
+		}
 		
 		// Refresh Menu contents in case onCreateMenuOptions was called before mEntry was set
 		ActivityCompat.invalidateOptionsMenu(this);
 		
 		// Update last access time.
-		mEntry.stampLastAccess();
+		mEntry.touch(false, false);
 		
 		fillData(false);
 
@@ -225,13 +239,16 @@ public class EntryActivity extends LockCloseActivity {
 	
 	protected void fillData(boolean trimList) {
 		ImageView iv = (ImageView) findViewById(R.id.entry_icon);
-		App.getDB().drawFactory.assignDrawableTo(iv, getResources(), mEntry.getIcon());
-
-		populateText(R.id.entry_title, mEntry.getTitle());
-		populateText(R.id.entry_user_name, mEntry.getUsername());
+		Database db = App.getDB();
+		db.drawFactory.assignDrawableTo(iv, getResources(), mEntry.getIcon());
 		
-		populateText(R.id.entry_url, mEntry.getUrl());
-		populateText(R.id.entry_password, mEntry.getPassword());
+		PwDatabase pm = db.pm;
+
+		populateText(R.id.entry_title, mEntry.getTitle(true, pm));
+		populateText(R.id.entry_user_name, mEntry.getUsername(true, pm));
+		
+		populateText(R.id.entry_url, mEntry.getUrl(true, pm));
+		populateText(R.id.entry_password, mEntry.getPassword(true, pm));
 		setPasswordStyle();
 		
 		populateText(R.id.entry_created, getDateTime(mEntry.getCreationTime()));
@@ -244,7 +261,7 @@ public class EntryActivity extends LockCloseActivity {
 		} else {
 			populateText(R.id.entry_expires, R.string.never);
 		}
-		populateText(R.id.entry_comment, mEntry.getNotes());
+		populateText(R.id.entry_comment, mEntry.getNotes(true, pm));
 
 	}
 	
@@ -366,11 +383,11 @@ public class EntryActivity extends LockCloseActivity {
 			return true;
 			
 		case R.id.menu_copy_user:
-			timeoutCopyToClipboard(mEntry.getUsername());
+			timeoutCopyToClipboard(mEntry.getUsername(true, App.getDB().pm));
 			return true;
 			
 		case R.id.menu_copy_pass:
-			timeoutCopyToClipboard(new String(mEntry.getPassword()));
+			timeoutCopyToClipboard(new String(mEntry.getPassword(true, App.getDB().pm)));
 			return true;
 			
 		case R.id.menu_lock:

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 Brian Pellin.
+ * Copyright 2010-2014 Brian Pellin.
  *     
  * This file is part of KeePassDroid.
  *
@@ -29,13 +29,14 @@ import java.util.UUID;
 
 import com.keepassdroid.database.security.ProtectedBinary;
 import com.keepassdroid.database.security.ProtectedString;
+import com.keepassdroid.utils.SprEngine;
 
 public class PwEntryV4 extends PwEntry implements ITimeLogger {
-	private static final String STR_TITLE = "Title";
-	private static final String STR_USERNAME = "UserName";
+	public static final String STR_TITLE = "Title";
+	public static final String STR_USERNAME = "UserName";
 	public static final String STR_PASSWORD = "Password";
-	private static final String STR_URL = "URL";
-	private static final String STR_NOTES = "Notes";
+	public static final String STR_URL = "URL";
+	public static final String STR_NOTES = "Notes";
 	
 	public PwGroupV4 parent;
 	public UUID uuid = PwDatabaseV4.UUID_ZERO;
@@ -185,25 +186,36 @@ public class PwEntryV4 extends PwEntry implements ITimeLogger {
 		
 		return newEntry;
 	}
+	
+	private String decodeRefKey(boolean decodeRef, String key, PwDatabase db) {
+		String text = getString(key);
+		if (decodeRef) {
+			text = decodeRef(text, db);
+		}
+		
+		return text;
+	}
 
-	@Override
-	public void stampLastAccess() {
-		lastAccess = new Date(System.currentTimeMillis());
+	private String decodeRef(String text, PwDatabase db) {
+		if (db == null) { return text; }
+		
+		SprEngine spr = SprEngine.getInstance(db);
+		return spr.compile(text, this, db);
 	}
 
 	@Override
-	public String getUsername() {
-		return getString(STR_USERNAME);
+	public String getUsername(boolean decodeRef, PwDatabase db) {
+		return decodeRefKey(decodeRef, STR_USERNAME, db);
 	}
 
 	@Override
-	public String getTitle() {
-		return getString(STR_TITLE);
+	public String getTitle(boolean decodeRef, PwDatabase db) {
+		return decodeRefKey(decodeRef, STR_TITLE, db);
 	}
 	
 	@Override
-	public String getPassword() {
-		return getString(STR_PASSWORD);
+	public String getPassword(boolean decodeRef, PwDatabase db) {
+		return decodeRefKey(decodeRef, STR_PASSWORD, db);
 	}
 
 	@Override
@@ -337,13 +349,13 @@ public class PwEntryV4 extends PwEntry implements ITimeLogger {
 	}
 
 	@Override
-	public String getNotes() {
-		return getString(STR_NOTES);
+	public String getNotes(boolean decodeRef, PwDatabase db) {
+		return decodeRefKey(decodeRef, STR_NOTES, db);
 	}
 
 	@Override
-	public String getUrl() {
-		return getString(STR_URL);
+	public String getUrl(boolean decodeRef, PwDatabase db) {
+		return decodeRefKey(decodeRef, STR_URL, db);
 	}
 
 	@Override
@@ -449,5 +461,29 @@ public class PwEntryV4 extends PwEntry implements ITimeLogger {
 		
 		return size;
 	}
+
+	@Override
+	public void touch(boolean modified, boolean touchParents) {
+		super.touch(modified, touchParents);
+		
+		++usageCount;
+	}
+
+	@Override
+	public void touchLocation() {
+		parentGroupLastMod = new Date();
+	}
 	
+	@Override
+	public void setParent(PwGroup parent) {
+		this.parent = (PwGroupV4) parent;
+	}
+	
+	public boolean isSearchingEnabled() {
+		if (parent != null) {
+			return parent.isSearchEnabled();
+		}
+		
+		return PwGroupV4.DEFAULT_SEARCHING_ENABLED;
+	}
 }

@@ -1,3 +1,69 @@
+ * Fix download URLs
+ * Add Hebrew translations from Arthur Zamarin
+
+KeePassDroid (1.99.11)
+ * Add support for decoding field references (closes: #247)
+ * Remove bad asserts (closes: #606)
+ * Add Latvian translations from Raimonds
+ * Add Basque translations from dgarciabad
+ * Polish transalation fix
+ * Responsiveness improvements
+ * Better support for read-only database files
+ * Output header hash for .kdb files
+
+KeePassDroid (1.99.10)
+ * Fix crashes on SELinux enabled devices
+
+KeePassDroid (1.99.9)
+ * Fix crashes on some Android 4.3 and x86 devices
+
+KeePassDroid (1.99.8)
+ * Fix crash in filename lookup
+ * Implement SecureRandom workaround
+
+KeePassDroid (1.99.7.2)
+ * Even better fix for recent file history
+ 
+KeePassDroid (1.99.7.1)
+ * Fix Force Close when recent file history is disabled (closes: #539)
+
+KeePassDroid (1.99.7)
+ * Don't require OI Filemanager before checking for another file manager
+ * Fix issues with file history (closes: #526)
+ * Updated Russian translations from I Nedoboy (closes: #524)
+ * Updated Finnish translations Mika Takala
+
+KeePassDroid (1.99.6)
+ * Fix off by one error on .kdb dates (closes: #518)
+ * Updated Russian translations from I Nedoboy (closes: #517)
+ * Use Sharedpreference to store recent files instead of sqlite dbs.
+   I see too many hard to explain crashes coming from the recent file
+   history dbs.
+ * Add setting to control remembering recent files list (closes: #444)
+ * Add new intents to auto-launch database with password
+ * Enable password changes on .kdbx
+
+KeePassdDroid (1.99.5)
+ * Support more generic file picker intents
+ * Better search implementation (respects .kdbx group search setting)
+ * Allow deleting .kdbx entries
+ * Fix some crashes
+ * Update Finnish translations.
+ * Update Hungarian translations
+
+KeePassDroid (1.99.4)
+ * New Swedish translation from Niclas Burgren
+ * Allow adding entries to .kdbx root group (closes: #490)
+ * Fix .kdb icon corruption bug (leads to KeePassX segfault)
+   (closes: #492)
+
+KeePassDroid (1.99.3)
+ * Updated German translations from Meviox
+ * Add Finnish translations from Mika Takala
+ * Add workaround for broken HTC Linkify
+ * Fix .kdbx max items field
+ * Fix compressed binary corruption (closes: #486)
+
 KeePassDroid (1.99.2)
  * Fix crash on entries without icons set (closes: #484) 
  * Prevent crash and show warning for Samsung clipboard error

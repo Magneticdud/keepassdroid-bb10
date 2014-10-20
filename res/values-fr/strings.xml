@@ -6,7 +6,7 @@
  
   KeePassDroid is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 3 of the License, or
+  the Free Software Foundation, either version 2 of the License, or
   (at your option) any later version.
  
   KeePassDroid is distributed in the hope that it will be useful,
@@ -29,7 +29,7 @@
 	<string name="add_group">Ajouter un groupe</string>
 	<string name="add_group_title">Ajouter un groupe</string>
 	<string name="algorithm">Algorithme</string>
-	<string name="algorithm_colon">Algorithme: </string> 
+	<string name="algorithm_colon">Algorithme :</string> 
 	<string name="app_timeout">Application timeout</string>
 	<string name="app_timeout_summary">Time before locking database when the application is inactive.</string>
 	<string name="application">Application</string>
