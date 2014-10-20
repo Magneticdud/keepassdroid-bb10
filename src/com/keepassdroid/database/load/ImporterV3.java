@@ -17,6 +17,7 @@
  *  along with KeePassDroid.  If not, see <http://www.gnu.org/licenses/>.
  *
  *
+Edits by Anmipo - http://keepassb.org/v1/
 
 Derived from
 
@@ -45,6 +46,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 package com.keepassdroid.database.load;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -133,16 +135,22 @@ public class ImporterV3 extends Importer {
 	throws IOException, InvalidDBException
 	{
 		PwDatabaseV3        newManager;
-
-
+ 
 		// Load entire file, most of it's encrypted.
-		int fileSize = inStream.available();
-		byte[] filebuf = new byte[fileSize + 16]; // Pad with a blocksize (Twofish uses 128 bits), since Android 4.3 tries to write more to the buffer
-		inStream.read(filebuf, 0, fileSize);
-		inStream.close();
 
+		// [AP] On BB10, .available() returns at most 8192, so we need to 
+		// read the stream in a loop until it's empty.
+		final int BLOCK_SIZE = 8192;
+		ByteArrayOutputStream bos = new ByteArrayOutputStream(BLOCK_SIZE);
+		byte[] buf = new byte[BLOCK_SIZE];
+		int len;
+		while ((len = inStream.read(buf, 0, BLOCK_SIZE)) != -1)
+			bos.write(buf, 0, len);
+		buf = null;
+		byte[] filebuf = bos.toByteArray();
+		
 		// Parse header (unencrypted)
-		if( fileSize < PwDbHeaderV3.BUF_SIZE )
+		if( filebuf.length < PwDbHeaderV3.BUF_SIZE )
 			throw new IOException( "File too short for header" );
 		PwDbHeaderV3 hdr = new PwDbHeaderV3();
 		hdr.loadFromFile(filebuf, 0 );
@@ -207,7 +215,7 @@ public class ImporterV3 extends Importer {
 		// Decrypt! The first bytes aren't encrypted (that's the header)
 		int encryptedPartSize;
 		try {
-			encryptedPartSize = cipher.doFinal(filebuf, PwDbHeaderV3.BUF_SIZE, fileSize - PwDbHeaderV3.BUF_SIZE, filebuf, PwDbHeaderV3.BUF_SIZE );
+			encryptedPartSize = cipher.doFinal(filebuf, PwDbHeaderV3.BUF_SIZE, filebuf.length - PwDbHeaderV3.BUF_SIZE, filebuf, PwDbHeaderV3.BUF_SIZE );
 		} catch (ShortBufferException e1) {
 			throw new IOException("Buffer too short");
 		} catch (IllegalBlockSizeException e1) {
